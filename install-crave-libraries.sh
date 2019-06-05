@@ -55,7 +55,10 @@ if [[ "$OS" == "osx"]];then
     cp -rf ${DEPS_DIR}/lingeling-ayv-86bf266-140429/include/* /usr/local/crave/include
         
     echo "Share directory..."
-    cp -rf ${BUILD_DIR}/share /usr/local/crave/share/
+    cp -rf ${BUILD_DIR}/share /usr/local/crave/share
+    
+    echo "Libraries directory..."
+    cp -rf ${BUILD_DIR}/lib /usr/local/crave/lib
     
     # This assumes that crave was built with boolector only
     echo "Dependent libraries (boolector and lingeling)..."
@@ -81,7 +84,10 @@ else
     cp -rf ${DEPS_DIR}/lingeling-ayv-86bf266-140429/include/* /usr/local/crave/include
         
     echo "Share directory..."
-    cp -rf ${BUILD_DIR}/share /usr/local/crave/share/
+    cp -rf ${BUILD_DIR}/share /usr/local/crave/share
+    
+    echo "Libraries directory..."
+    cp -rf ${BUILD_DIR}/lib /usr/local/crave/lib
     
     # This assumes that crave was built with boolector only
     echo "Dependent libraries (boolector and lingeling)..."
