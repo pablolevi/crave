@@ -1,9 +1,9 @@
 [submodule "dependencies"]
 	path = dependencies
-	url = https://github.com/agra-uni-bremen/dependencies.git
+	url = git@github.com:pablolevi/crave-solver-dependencies.git
 [submodule "examples"]
 	path = examples
-	url = https://github.com/hoangmle/crave-examples.git
+	url = git@github.com:pablolevi/crave-examples.git
 [submodule "metaSMT"]
 	path = metaSMT
-	url = https://github.com/hoangmle/metaSMT.git
+	url = git@github.com:pablolevi/metaSMT.git
