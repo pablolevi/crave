@@ -1,13 +1,13 @@
 #!/bin/bash
 
-ARCH="osx"
+OS="osx"
 SOURCE_DIR="undef"
 
 PARAMS=""
 while (( "$#" )); do
   case "$1" in
-    -a|--arch)
-      ARCH=$2
+    -o|--os)
+      OS=$2
       shift 2
       ;;
     -s|--source-dir)
@@ -38,20 +38,62 @@ fi
 
 echo "Installing CRAVE libraries"
 BUILD_DIR=${SOURCE_DIR}/build/root
+DEPS_DIR=${SOURCE_DIR}/deps
 
-if [[ "$ARCH" == "osx"]];then
+if [[ "$OS" == "osx"]];then
+    echo "Mac OS"
+    if [[ ! -d "/usr/local/crave" ]];then
+	    echo "/usr/local/crave does not exist. Creating it..."
+	    # This will create both crave and crave/lib, which is needed below
+	    mkdir -p /usr/local/crave/lib
+    fi
+
     echo "Installing include headers..."
-    cp -rf ${BUILD_DIR}/include/* /usr/local/include/
-    cp -rf ${BUILD_DIR}/share/* /usr/local/share/
-    echo "Installing library dependencies"
-    cp -rf ${BUILD_DIR}/lib/* /usr/local/lib/
+    cp -rf ${BUILD_DIR}/include /usr/local/crave/include
+    cp -rf ${DEPS_DIR}/boolector-2.2.0/include/* /usr/local/crave/include
+    cp -rf ${DEPS_DIR}/minisat-git/include/* /usr/local/crave/include
+    cp -rf ${DEPS_DIR}/lingeling-ayv-86bf266-140429/include/* /usr/local/crave/include
+        
+    echo "Share directory..."
+    cp -rf ${BUILD_DIR}/share /usr/local/crave/share/
+    
+    # This assumes that crave was built with boolector only
+    echo "Dependent libraries (boolector and lingeling)..."
+    cp -f ${DEPS_DIR}/boolector-2.2.0/lib/libboolector.dylib ${DEPS_DIR}/lingeling-ayv-86bf266-140429/lib/liblingeling.dylib /usr/local/crave/lib
+    
+    echo "minisat library"
+    cp -f ${DEPS_DIR}/minisat-git/lib/libminisat.2.1.0.dylib /usr/local/crave/lib
+    cp -f ${DEPS_DIR}/minisat-git/lib/libminisat.2.dylib /usr/local/crave/lib
+    rm -f /usr/local/crave/lib/libminisat.dylib; ln -s /usr/local/crave/lib/libminisat.2.dylib /usr/local/crave/lib/libminisat.dylib
 
 else
+    echo "Assuming Linux OS"
+    if [[ ! -d "/usr/local/crave" ]];then
+	    echo "/usr/local/crave does not exist. Creating it..."
+	    # This will create both crave and crave/lib, which is needed below
+	    mkdir -p /usr/local/crave/lib
+    fi
+
     echo "Installing include headers..."
-    cp -rf ${BUILD_DIR}/include/* /usr/local/include/
-    cp -rf ${BUILD_DIR}/share/* /usr/local/share/
-    echo "Installing library dependencies"
-    cp -rf ${BUILD_DIR}/lib/* /usr/local/lib/
+    cp -rf ${BUILD_DIR}/include /usr/local/crave/include
+    cp -rf ${DEPS_DIR}/boolector-2.2.0/include/* /usr/local/crave/include
+    cp -rf ${DEPS_DIR}/minisat-git/include/* /usr/local/crave/include
+    cp -rf ${DEPS_DIR}/lingeling-ayv-86bf266-140429/include/* /usr/local/crave/include
+        
+    echo "Share directory..."
+    cp -rf ${BUILD_DIR}/share /usr/local/crave/share/
+    
+    # This assumes that crave was built with boolector only
+    echo "Dependent libraries (boolector and lingeling)..."
+    # Fix this to the linux shared objects
+    cp -f ${DEPS_DIR}/boolector-2.2.0/lib/libboolector.dylib ${DEPS_DIR}/lingeling-ayv-86bf266-140429/lib/liblingeling.dylib /usr/local/crave/lib
+    
+    echo "minisat library"
+    # Fix this to the linux shared objects
+    cp -f ${DEPS_DIR}/minisat-git/lib/libminisat.2.1.0.dylib /usr/local/crave/lib
+    cp -f ${DEPS_DIR}/minisat-git/lib/libminisat.2.dylib /usr/local/crave/lib
+    rm -f /usr/local/crave/lib/libminisat.dylib; ln -s /usr/local/crave/lib/libminisat.2.dylib /usr/local/crave/lib/libminisat.dylib
+
     # crave/deps/glog-git-0.3.3/lib/libglog.so
     # crave/deps/systemc-2.3.1/lib-linux64/libsystemc.a
     # crave/deps/boost-1_55_0-fs/lib/libboost_filesystem.so
