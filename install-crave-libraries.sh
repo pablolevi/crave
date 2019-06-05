@@ -58,7 +58,7 @@ if [[ "$OS" == "osx"]];then
     cp -rf ${BUILD_DIR}/share /usr/local/crave/share
     
     echo "Libraries directory..."
-    cp -rf ${BUILD_DIR}/lib /usr/local/crave/lib
+    cp -rf ${BUILD_DIR}/lib/* /usr/local/crave/lib
     
     # This assumes that crave was built with boolector only
     echo "Dependent libraries (boolector and lingeling)..."
@@ -87,7 +87,7 @@ else
     cp -rf ${BUILD_DIR}/share /usr/local/crave/share
     
     echo "Libraries directory..."
-    cp -rf ${BUILD_DIR}/lib /usr/local/crave/lib
+    cp -rf ${BUILD_DIR}/lib/* /usr/local/crave/lib
     
     # This assumes that crave was built with boolector only
     echo "Dependent libraries (boolector and lingeling)..."
